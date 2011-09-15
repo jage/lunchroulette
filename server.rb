@@ -12,20 +12,23 @@ class LiuLunch < Sinatra::Base
     end
 
     puts request.params
-    command = request.params['message'].strip.downcase
+    commands = request.params['message'].strip.downcase.split(/\s+/)
 
-    response = case command
+    response = case commands.first
     # Match on different spellings
     when /ro{0,1}u{0,1}l{1,2}et{1,2}e/
+      if commands[1]
+        food_list = food_list.select {|d| d[1].downcase.strip == commands[1] }
+      end
       rnd = Random.new.rand(0..(food_list.size - 1))
       choice = food_list[rnd]
       "Du ska äta \"#{choice[0]}\" på #{choice[1]}"
     else
-      menu = food_list.select {|d| d[1].downcase.strip == command }.collect {|d| "* #{d[0]}" }.join("\n")
+      menu = food_list.select {|d| d[1].downcase.strip == commands.join }.collect {|d| "* #{d[0]}" }.join("\n")
       unless menu.empty?
         menu
       else
-        "Skicka 'Roulette' om du vill ha matförslag eller 'Kårallen', 'Blåmesen', 'Zenit' för att se meny."
+        "Skicka 'Roulette' om du vill ha matförslag eller 'Kårallen', 'Blåmesen', 'Zenit' för att se meny. Det går även att skicka t.ex 'Roulette Kårallen' för att slumpa i kårallens meny."
       end
     end
     puts response
