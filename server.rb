@@ -8,7 +8,7 @@ class LiuLunch < Sinatra::Base
         Marshal.load(f)
       end
     else
-      error = "Ät matlåda."
+      response = "Ät matlåda."
     end
 
     puts request.params
