@@ -15,12 +15,12 @@ todays_food = list.select {|l| l["date"] == Date.today }.first
 food_list = []
 
 todays_food["menus"].each do |restaurant|
-  food_list += restaurant["dishes"].collect {|d| [d["name"], restaurant["name"]] }
+  food_list += restaurant["dishes"].collect {|d| {:food => d["name"], :restaurant => restaurant["name"]} }
 end
 
-food_list += ["Big Mac & co", "Chicken Nuggets"].collect {|x| [x, "McDonalds"]}
-food_list += ["Pasta"].collect {|x| [x, "Pastavagnen"]}
-food_list += ["Sallad", "Macka"].collect {|x| [x, "Cesam"]}
+food_list += ["Big Mac & co", "Chicken Nuggets"].collect {|x| {:food => x, :restaurant => "McDonalds"}}
+food_list += ["Pasta"].collect {|x| {:food => x, :restaurant => "Pastavagnen"}}
+food_list += ["Sallad", "Macka"].collect {|x| {:food => x, :restaurant => "Cesam"}}
 
 File.open('food.db', 'w') do |f|
   Marshal.dump(food_list, f)
