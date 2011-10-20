@@ -2,29 +2,27 @@
 require 'sinatra/base'
 require "sinatra/reloader" # TODO: Only in development
 
-DATABASE = 'food.db'
+
+def database
+  'food.db'
+end
 
 class DatabaseError < RuntimeError; end
 
-raise(DatabaseError, "Could not find #{DATABASE}") unless File.exists?(DATABASE)
+raise(DatabaseError, "Could not find #{DATABASE}") unless File.exists?(database)
 
 class LiuLunch < Sinatra::Base
   post '/receive' do
-    if File.exists?(DATABASE)
-      @food_list = File.open(DATABASE, 'r') do |f|
+    if File.exists?(database)
+      @food_list = File.open(database, 'r') do |f|
         Marshal.load(f)
       end
     else
       response = "Ät matlåda."
     end
 
-    puts request.params
-
     commands = request.params['message'].strip.downcase.split(/\s+/)
-    response = match_commands(commands)
-
-    puts response
-    response
+    match_commands(commands)
   end
 
 private
@@ -36,7 +34,7 @@ private
     else
       menu = @food_list.select {|d| d[:restaurant].downcase.strip == commands.join }
       unless menu.empty?
-        menu.collect {|row| "* #{row[:food]}" }.join("\n")
+        menu.collect {|row| "* #{row[:food].strip}" }.join("\n")
       else
         help
       end
