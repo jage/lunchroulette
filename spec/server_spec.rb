@@ -27,31 +27,34 @@ describe "LiULunch" do
   it "should offer todays Kårallen meny" do
     Timecop.freeze(Time.utc(2011,10, 3, 9, 0)) do
       post '/receive', {:message => 'Kårallen'}
-      last_response.body.should == "* Mexikansk kyckling med ris
+    end
+
+    last_response.body.should == "* Mexikansk kyckling med ris
 * Cajunköttgryta med chorizo serveras med kokt potatis
 * Nudelwok med strimlat fläskkött , bambuskott &  vattenkastanjer
 * Mexikansk quornfilé med ris
 * Hemlagad ärtsoppa med fläsk (Köp till nystekta pannkakor med sylt & grädde för 15:-)"
-    end
   end
 
   it "should offer todays Blåmesen meny" do
     Timecop.freeze(Time.utc(2011,10, 3, 9, 0)) do
       post '/receive', {:message => 'Blåmesen'}
-      last_response.body.should == "* Ärtsoppa & pannkakor m. sylt & grädde
+    end
+
+    last_response.body.should == "* Ärtsoppa & pannkakor m. sylt & grädde
 * Gratinerad häxkittel
 * Broccoligratäng
 * Fetaostfylld lövbiff med tzatziki
 * Räksoppa"
-    end
   end
 
   it "should offer todays Zenit meny" do
     Timecop.freeze(Time.utc(2011,10, 3, 9, 0)) do
       post '/receive', {:message => 'Zenit'}
-      last_response.body.should == "* Färskosttoppad FÄRSBIFF serveras med salviasås och Lasses hemlagade potatismos
+    end
+
+    last_response.body.should == "* Färskosttoppad FÄRSBIFF serveras med salviasås och Lasses hemlagade potatismos
 * Ugnsstek TORSKRYGG med smörbrynta champinjoner och räkor serveras med hemlagat potatismos
 * Veg Ädelostbakad rotfruktslåda med grädde och örter serveras med hemlagat potatismos"
-    end
   end
 end

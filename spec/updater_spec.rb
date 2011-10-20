@@ -21,6 +21,6 @@ describe "updater" do
     food_list.size.should == 18
 
     # Cleanup
-    FileUtils.rm(database)
+    #FileUtils.rm(database)
   end
 end
