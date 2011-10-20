@@ -1,5 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'sinatra/base'
+require "sinatra/reloader" # TODO: Only in development
 
 DATABASE = 'food.db'
 
