@@ -48,8 +48,7 @@ private
     if commands[1]
       @food_list = @food_list.select {|d| d[:restaurant].downcase.strip == commands[1] }
     end
-    rnd = Random.new.rand(0..(@food_list.size - 1))
-    choice = @food_list[rnd]
+    choice = @food_list[rand(@food_list.size)]
     "Du ska äta \"#{choice[:food]}\" på #{choice[:restaurant]}"
   end
 
