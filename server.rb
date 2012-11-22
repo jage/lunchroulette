@@ -1,6 +1,5 @@
 # -*- encoding : utf-8 -*-
 require 'sinatra/base'
-require "sinatra/reloader" # TODO: Only in development
 require 'mongo'
 
 class LiuLunch < Sinatra::Base

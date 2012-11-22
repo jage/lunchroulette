@@ -1,7 +1,6 @@
 source :rubygems
 
 gem 'sinatra'
-gem 'sinatra-reloader'
 gem 'json_pure'
 gem 'bson_ext'
 gem 'mongo'
