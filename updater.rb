@@ -4,9 +4,6 @@ require 'json/pure'
 require 'date'
 require 'mongo'
 
-# TODO DB
-# TODO config.ru
-# TODO Heroku
 # TODO Refactor
 
 class Updater

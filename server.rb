@@ -49,7 +49,3 @@ private
     "Skicka 'Roulette' om du vill ha matförslag eller 'Kårallen', 'Blåmesen', 'Zenit' för att se meny. Det går även att skicka t.ex 'Roulette Kårallen' för att slumpa i kårallens meny."
   end
 end
-
-if __FILE__ == $0
-  LiuLunch.run! :host => '0.0.0.0', :port => 8293
-end
