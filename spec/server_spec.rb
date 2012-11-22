@@ -1,10 +1,6 @@
 # -*- encoding : utf-8 -*-
 require File.dirname(__FILE__) + '/spec_helper'
 
-# Use fixture food.db
-def database
-  fixture('food.db')
-end
 
 describe "LiULunch" do
   include Rack::Test::Methods
@@ -12,6 +8,10 @@ describe "LiULunch" do
   # App to be used
   def app
     @app ||= LiuLunch
+  end
+
+  before do
+    LiuLunch.any_instance.stub(:food_list).and_return(food_list)
   end
 
   it "should respond to /receive" do
@@ -57,4 +57,25 @@ describe "LiULunch" do
 * Ugnsstek TORSKRYGG med smörbrynta champinjoner och räkor serveras med hemlagat potatismos
 * Veg Ädelostbakad rotfruktslåda med grädde och örter serveras med hemlagat potatismos"
   end
+end
+
+def food_list
+  [{:food=>"Ärtsoppa & pannkakor m. sylt & grädde", :restaurant=>"Blåmesen"},
+   {:food=>"Gratinerad häxkittel", :restaurant=>"Blåmesen"},
+   {:food=>"Broccoligratäng", :restaurant=>"Blåmesen"},
+   {:food=>"Fetaostfylld lövbiff med tzatziki", :restaurant=>"Blåmesen"},
+   {:food=>"Räksoppa", :restaurant=>"Blåmesen"},
+   {:food=>"Mexikansk kyckling med ris ", :restaurant=>"Kårallen"},
+   {:food=>"Cajunköttgryta med chorizo serveras med kokt potatis", :restaurant=>"Kårallen"},
+   {:food=>"Nudelwok med strimlat fläskkött , bambuskott &  vattenkastanjer", :restaurant=>"Kårallen"},
+   {:food=>"Mexikansk quornfilé med ris", :restaurant=>"Kårallen"},
+   {:food=>"Hemlagad ärtsoppa med fläsk (Köp till nystekta pannkakor med sylt & grädde för 15:-)", :restaurant=>"Kårallen"},
+   {:food=>"Färskosttoppad FÄRSBIFF serveras med salviasås och Lasses hemlagade potatismos", :restaurant=>"Zenit"},
+   {:food=>"Ugnsstek TORSKRYGG med smörbrynta champinjoner och räkor serveras med hemlagat potatismos", :restaurant=>"Zenit"},
+   {:food=>" Veg Ädelostbakad rotfruktslåda med grädde och örter serveras med hemlagat potatismos", :restaurant=>"Zenit"},
+   {:food=>"Big Mac & co", :restaurant=>"McDonalds"},
+   {:food=>"Chicken Nuggets", :restaurant=>"McDonalds"},
+   {:food=>"Pasta", :restaurant=>"Pastavagnen"},
+   {:food=>"Sallad", :restaurant=>"Cesam"},
+   {:food=>"Macka", :restaurant=>"Cesam"}]
 end

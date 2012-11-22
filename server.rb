@@ -1,31 +1,26 @@
 # -*- encoding : utf-8 -*-
 require 'sinatra/base'
 require "sinatra/reloader" # TODO: Only in development
-
-
-def database
-  'food.db'
-end
-
-class DatabaseError < RuntimeError; end
-
-raise(DatabaseError, "Could not find #{DATABASE}") unless File.exists?(database)
+require 'mongo'
 
 class LiuLunch < Sinatra::Base
   post '/receive' do
-    if File.exists?(database)
-      @food_list = File.open(database, 'r') do |f|
-        Marshal.load(f)
-      end
-    else
-      response = "Ät matlåda."
-    end
+    @food_list = food_list
+
+    return response = 'Ät matlåda' unless @food_list
 
     commands = request.params['message'].strip.downcase.split(/\s+/)
     match_commands(commands)
   end
 
 private
+
+  def food_list
+    mongo = Mongo::Connection.new.db
+    if marshal = mongo['marshal'].find_one({ 'kind' => 'latest' })
+      Marshal.load(marshal['dump'])
+    end
+  end
 
   def match_commands(commands)
     case commands.first

@@ -9,11 +9,15 @@ end
 # FIXME Shamrock block Service { Updater ...}
 
 describe "updater" do
-  it 'should create food.db' do
+  it 'should save food list' do
     response = fixture('menu0001.txt').read
     rack = proc {|env| [200, {"Content-Type" => "text/html"}, [response]]}
     @lunch_service = Shamrock::Service.new(rack)
     @lunch_service.start
+
+    Updater.should_receive(:save) do |food_list|
+      food_list.size.should eq(18)
+    end
 
     # Time machine
     Timecop.freeze(Time.utc(2011,10, 17, 9, 0)) do
@@ -21,16 +25,5 @@ describe "updater" do
     end
 
     @lunch_service.stop
-
-    File.exist?(database).should == true
-
-    food_list = File.open(database, 'r') do |f|
-      Marshal.load(f)
-    end
-
-    food_list.size.should == 18
-
-    # Cleanup
-    #FileUtils.rm(database)
   end
 end

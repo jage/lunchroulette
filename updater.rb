@@ -2,6 +2,12 @@
 require 'open-uri'
 require 'json/pure'
 require 'date'
+require 'mongo'
+
+# TODO DB
+# TODO config.ru
+# TODO Heroku
+# TODO Refactor
 
 class Updater
   class << self
@@ -25,8 +31,15 @@ class Updater
       food_list += ["Pasta"].collect {|x| {:food => x, :restaurant => "Pastavagnen"}}
       food_list += ["Sallad", "Macka"].collect {|x| {:food => x, :restaurant => "Cesam"}}
 
-      File.open(database, 'w') do |f|
-        Marshal.dump(food_list, f)
+      save(food_list)
+    end
+
+    def save(food_list)
+      mongo = Mongo::Connection.new.db
+      if mongo['marshal'].find_one({ 'kind' => 'latest' })
+        mongo['marshal'].update({ 'kind' => 'latest' }, { 'dump' => Marshal.dump(food_list) })
+      else
+        mongo['marshal'].insert({ 'kind' => 'latest', 'dump' => Marshal.dump(food_list) })
       end
     end
   end
