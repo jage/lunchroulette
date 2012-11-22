@@ -12,7 +12,7 @@ describe "updater" do
   it 'should save food list' do
     response = fixture('menu0001.txt').read
     rack = proc {|env| [200, {"Content-Type" => "text/html"}, [response]]}
-    @lunch_service = Shamrock::Service.new(rack)
+    @lunch_service = Shamrock::Service.new(rack, :AccessLog => [], :Logger => WEBrick::Log::new("/dev/null", 7))
     @lunch_service.start
 
     Updater.should_receive(:save) do |food_list|
