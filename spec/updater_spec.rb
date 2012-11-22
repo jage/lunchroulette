@@ -2,28 +2,26 @@
 require File.dirname(__FILE__) + '/spec_helper'
 require 'shamrock'
 
-def database
-  File.join(File.dirname(__FILE__), 'tmp', 'food.db')
+def with_server(rack, &block)
+  service = Shamrock::Service.new(rack, :AccessLog => [], :Logger => WEBrick::Log::new("/dev/null", 7))
+  service.start
+  block.call(service.url)
+  service.stop
 end
-
-# FIXME Shamrock block Service { Updater ...}
 
 describe "updater" do
   it 'should save food list' do
     response = fixture('menu0001.txt').read
-    rack = proc {|env| [200, {"Content-Type" => "text/html"}, [response]]}
-    @lunch_service = Shamrock::Service.new(rack, :AccessLog => [], :Logger => WEBrick::Log::new("/dev/null", 7))
-    @lunch_service.start
+    rack = proc { |env| [200, {}, [response]]}
 
     Updater.should_receive(:save) do |food_list|
       food_list.size.should eq(18)
     end
 
-    # Time machine
-    Timecop.freeze(Time.utc(2011,10, 17, 9, 0)) do
-      Updater.run(@lunch_service.url)
+    with_server(rack) do |url|
+      Timecop.freeze(Time.utc(2011,10, 17, 9, 0)) do
+        Updater.run(url)
+      end
     end
-
-    @lunch_service.stop
   end
 end
