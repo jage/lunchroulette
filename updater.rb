@@ -5,8 +5,8 @@ require 'date'
 
 class Updater
   class << self
-    def run
-      list = JSON.parse(open('http://lunch.serp.se/menu0001.txt').read)
+    def run(url = 'http://lunch.serp.se/menu0001.txt')
+      list = JSON.parse(open(url).read)
 
       # Convert Date
       list.each do |item|

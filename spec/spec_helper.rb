@@ -6,7 +6,6 @@ require 'rubygems'
 require 'bundler/setup'
 require 'rspec'
 require 'sinatra'
-require 'webmock/rspec'
 require 'rack/test'
 require 'timecop'
 
