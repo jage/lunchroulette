@@ -25,10 +25,7 @@ describe "LiULunch" do
   end
 
   it "should offer todays Kårallen meny" do
-    Timecop.freeze(Time.utc(2011,10, 3, 9, 0)) do
-      post '/receive', {:message => 'Kårallen'}
-    end
-
+    post '/receive', {:message => 'Kårallen'}
     last_response.body.should == "* Mexikansk kyckling med ris
 * Cajunköttgryta med chorizo serveras med kokt potatis
 * Nudelwok med strimlat fläskkött , bambuskott &  vattenkastanjer
@@ -37,10 +34,7 @@ describe "LiULunch" do
   end
 
   it "should offer todays Blåmesen meny" do
-    Timecop.freeze(Time.utc(2011,10, 3, 9, 0)) do
-      post '/receive', {:message => 'Blåmesen'}
-    end
-
+    post '/receive', {:message => 'Blåmesen'}
     last_response.body.should == "* Ärtsoppa & pannkakor m. sylt & grädde
 * Gratinerad häxkittel
 * Broccoligratäng
@@ -49,10 +43,7 @@ describe "LiULunch" do
   end
 
   it "should offer todays Zenit meny" do
-    Timecop.freeze(Time.utc(2011,10, 3, 9, 0)) do
-      post '/receive', {:message => 'Zenit'}
-    end
-
+    post '/receive', {:message => 'Zenit'}
     last_response.body.should == "* Färskosttoppad FÄRSBIFF serveras med salviasås och Lasses hemlagade potatismos
 * Ugnsstek TORSKRYGG med smörbrynta champinjoner och räkor serveras med hemlagat potatismos
 * Veg Ädelostbakad rotfruktslåda med grädde och örter serveras med hemlagat potatismos"
