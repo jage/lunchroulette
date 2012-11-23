@@ -4,9 +4,7 @@ require 'mongo'
 
 class LiuLunch < Sinatra::Base
   post '/receive' do
-    @food_list = food_list
-
-    return response = 'Ät matlåda' unless @food_list
+    return response = 'Ät matlåda' unless food_list
 
     commands = request.params['message'].strip.downcase.split(/\s+/)
     match_commands(commands) || help
@@ -15,9 +13,10 @@ class LiuLunch < Sinatra::Base
 private
 
   def food_list
+    return @food_list if @food_list
     mongo = Mongo::Connection.new.db
     if marshal = mongo['marshal'].find_one({ 'kind' => 'latest' })
-      Marshal.load(marshal['dump'])
+      @food_list = Marshal.load(marshal['dump'])
     end
   end
 
@@ -31,20 +30,20 @@ private
   end
 
   def menu_for(restaurant)
-    menu = @food_list.select { |f| f[:restaurant].downcase.strip == restaurant }
+    menu = food_list.select { |f| f[:restaurant].downcase.strip == restaurant }
     menu.map { |r| "* #{r[:food].strip}" }.join("\n")
   end
 
   def restaurants
-    @food_list.map { |f| f[:restaurant].downcase.strip }.uniq
+    food_list.map { |f| f[:restaurant].downcase.strip }.uniq
   end
 
   def roulette(commands)
-    # If roulette <filter>, filter food_list for <filter>
+    list = food_list
     if commands[1]
-      @food_list = @food_list.select {|d| d[:restaurant].downcase.strip == commands[1] }
+      list.select! {|d| d[:restaurant].downcase.strip == commands[1] }
     end
-    choice = @food_list[rand(@food_list.size)]
+    choice = list[rand(list.size)]
     "Du ska äta \"#{choice[:food]}\" på #{choice[:restaurant]}"
   end
 
