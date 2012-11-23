@@ -6,7 +6,7 @@ class LiuLunch < Sinatra::Base
   post '/receive' do
     @food_list = food_list
 
-    return response = 'Ät matlåda' unless @food_list
+    return 'Ät matlåda' unless @food_list
 
     commands = request.params['message'].strip.downcase.split(/\s+/)
     match_commands(commands)
