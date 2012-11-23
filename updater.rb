@@ -29,11 +29,13 @@ class Updater
   end
 
   def self.save(food_list)
+    record = { 'kind' => 'latest', 'dump' => Marshal.dump(food_list) }
+    key = {'kind' => 'latest'}
     mongo = Mongo::Connection.new.db
-    if mongo['marshal'].find_one({ 'kind' => 'latest' })
-      mongo['marshal'].update({ 'kind' => 'latest' }, { 'dump' => Marshal.dump(food_list) })
+    if mongo['marshal'].find_one(key)
+      mongo['marshal'].update(key, record)
     else
-      mongo['marshal'].insert({ 'kind' => 'latest', 'dump' => Marshal.dump(food_list) })
+      mongo['marshal'].insert(record)
     end
   end
 end
