@@ -4,6 +4,7 @@ gem 'sinatra'
 gem 'json_pure'
 gem 'bson_ext'
 gem 'mongo'
+gem 'thin'
 
 group :development do
   gem 'debugger'
