@@ -4,43 +4,46 @@ require 'mongo'
 
 class LiuLunch < Sinatra::Base
   post '/receive' do
-    @food_list = food_list
-
-    return 'Ät matlåda' unless @food_list
+    return 'Ät matlåda' unless food_list
 
     commands = request.params['message'].strip.downcase.split(/\s+/)
-    match_commands(commands)
+    match_commands(commands) || help
   end
 
 private
 
   def food_list
+    return @food_list if @food_list
     mongo = Mongo::Connection.new.db
     if marshal = mongo['marshal'].find_one({ 'kind' => 'latest' })
-      Marshal.load(marshal['dump'])
+      @food_list = Marshal.load(marshal['dump'])
     end
   end
 
   def match_commands(commands)
-    case commands.first
-    when /ro{0,1}u{0,1}l{1,2}et{1,2}e/
+    command = commands.first
+    if /ro{0,1}u{0,1}l{1,2}et{1,2}e/.match(command)
       roulette(commands)
-    else
-      menu = @food_list.select {|d| d[:restaurant].downcase.strip == commands.join }
-      unless menu.empty?
-        menu.collect {|row| "* #{row[:food].strip}" }.join("\n")
-      else
-        help
-      end
+    elsif restaurants.include?(command)
+      menu_for(command)
     end
   end
 
+  def menu_for(restaurant)
+    menu = food_list.select { |f| f[:restaurant].downcase.strip == restaurant }
+    menu.map { |r| "* #{r[:food].strip}" }.join("\n")
+  end
+
+  def restaurants
+    food_list.map { |f| f[:restaurant].downcase.strip }.uniq
+  end
+
   def roulette(commands)
-    # If roulette <filter>, filter food_list for <filter>
-    if commands[1]
-      @food_list = @food_list.select {|d| d[:restaurant].downcase.strip == commands[1] }
+    list = food_list
+    if commands[1] && restaurants.include?(commands[1].to_s.downcase.strip)
+      list.select! {|d| d[:restaurant].downcase.strip == commands[1] }
     end
-    choice = @food_list[rand(@food_list.size)]
+    choice = list[rand(list.size)]
     "Du ska äta \"#{choice[:food]}\" på #{choice[:restaurant]}"
   end
 
