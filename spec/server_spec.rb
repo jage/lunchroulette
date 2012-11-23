@@ -19,6 +19,11 @@ describe "LiULunch" do
     last_response.should be_ok
   end
 
+  it "should offer random food to roulette command" do
+    post '/receive', {:message => 'Roulette'}
+    last_response.body.should match /^Du ska äta "(.*)" på (.*)$/
+  end
+
   it "should offer help for random command" do
     post '/receive', {:message => 'blablablabla'}
     last_response.body.should == "Skicka 'Roulette' om du vill ha matförslag eller 'Kårallen', 'Blåmesen', 'Zenit' för att se meny. Det går även att skicka t.ex 'Roulette Kårallen' för att slumpa i kårallens meny."
