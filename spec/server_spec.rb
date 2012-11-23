@@ -4,6 +4,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe "LiULunch" do
   include Rack::Test::Methods
+  include CustomMatchers
 
   # App to be used
   def app
@@ -22,6 +23,16 @@ describe "LiULunch" do
   it "should offer random food to roulette command" do
     post '/receive', {:message => 'Roulette'}
     last_response.body.should match /^Du ska äta "(.*)" på (.*)$/
+  end
+
+  it "should handle roulette filter" do
+    post '/receive', {:message => 'Roulette Kårallen'}
+    last_response.body.should be_part_of(roulette_answers_for('Kårallen'))
+  end
+
+  it "should use all menus if roulette filter is invalid" do
+    post '/receive', {:message => 'Roulette OMGOMG'}
+    last_response.body.should be_part_of(roulette_answers)
   end
 
   it "should offer help for random command" do
@@ -74,4 +85,12 @@ def food_list
    {:food=>"Pasta", :restaurant=>"Pastavagnen"},
    {:food=>"Sallad", :restaurant=>"Cesam"},
    {:food=>"Macka", :restaurant=>"Cesam"}]
+end
+
+def roulette_answers(list = food_list)
+  list.map { |f| "Du ska äta \"#{f[:food]}\" på #{f[:restaurant]}" }
+end
+
+def roulette_answers_for(restaurant)
+  roulette_answers(food_list.select { |f| f[:restaurant] == restaurant })
 end
