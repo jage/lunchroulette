@@ -43,7 +43,7 @@ private
     if commands[1] && restaurants.include?(commands[1].to_s.downcase.strip)
       list.select! {|d| d[:restaurant].downcase.strip == commands[1] }
     end
-    choice = list[rand(list.size)]
+    choice = list.sample
     "Du ska äta \"#{choice[:food]}\" på #{choice[:restaurant]}"
   end
 
