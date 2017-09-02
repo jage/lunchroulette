@@ -1,3 +1,19 @@
 # LiU Lunch Roulette
 
-![](https://dl.dropbox.com/u/171282/IMG_1089.PNG)
+SMS conversation:
+
+>> Roulette
+
+> Du ska äta "Viltskavsgryta med pasta" på Blåmesen
+
+>> Kårallen
+
+> * Gräddstuvad pytt i panna med stekt ägg och rödbetor
+> * Pannbiff med dragonsås stekt potatis
+> * Vegetarisk sojafärs med ris och chips
+> * Tacostekt nötfärs med ris tortillachips salsa och grönsaker
+> * Fransk löpsoppa
+
+Screenshot:
+
+![Screenshot](example/ios_screenshot.png)
